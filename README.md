@@ -1,0 +1,2 @@
+# Remote-Neuro-Rehabilitation-Brain-Health-Monitoring
+This project introduces a web-based prototype designed to detect cognitive fatigue and neuro-muscular anomalies through the analysis of EEG (Electroencephalography) data. By combining machine learning techniques with biosignal processing, the system aims to provide accurate, personalized, and real-time monitoring of brain and neuromuscular health.
