@@ -27,5 +27,5 @@ This project proposes a **modular and scalable** system that processes EEG and E
 - Display of fatigue scores, anomaly alerts, and session summaries.  
 - Role-based access (patient, doctor).
 
-### 4. Database (MongoDB or PostgreSQL)
+### 4. Database (MongoDB & PostgreSQL)
 - Storage of user profiles, session data, and detected anomalies.
