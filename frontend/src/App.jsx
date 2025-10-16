@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import EEGChart from "./components/EEGcharts.jsx";
+import StatusCard from "./components/StatusCard.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [signal, setSignal] = useState([]);
+  const [fatigue, setFatigue] = useState(0);
+  const [anomaly, setAnomaly] = useState(false);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://127.0.0.1:8000/ws/eeg");
+
+    ws.onopen = () => {
+      console.log("✅ Connected to EEG WebSocket");
+      setConnected(true);
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const raw = data.raw_signal.slice(0, 200).map((v, i) => ({ index: i, value: v }));
+      setSignal(raw);
+      setFatigue(data.fatigue_level);
+      setAnomaly(data.anomaly === 1);
+    };
+
+    ws.onclose = () => {
+      console.log("❌ Disconnected from EEG WebSocket");
+      setConnected(false);
+    };
+
+    return () => ws.close();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+      <h1 className="text-3xl font-bold mb-4 text-indigo-700">
+        🧠 Neuro-Rehabilitation & Brain Health Dashboard
+      </h1>
+
+      <div className="mb-4">
+        <StatusCard fatigue={fatigue} anomaly={anomaly} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+
+      <EEGChart data={signal} />
+
+      <p className="mt-4 text-sm text-gray-600">
+        Connection Status:{" "}
+        <span className={connected ? "text-green-600" : "text-red-500"}>
+          {connected ? "Connected" : "Disconnected"}
+        </span>
       </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
