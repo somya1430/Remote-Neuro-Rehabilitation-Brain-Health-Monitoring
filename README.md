@@ -29,3 +29,7 @@ This project proposes a **modular and scalable** system that processes EEG and E
 
 ### 4. Database (MongoDB & PostgreSQL)
 - Storage of user profiles, session data, and detected anomalies.
+
+### Real-Time EEG/EMG Monitoring Dashboard
+![Dashboard Preview](.Documentation/image/dashboard1.png)
+![Dashboard Preview](.Documentation/images/dashboard2.png)
